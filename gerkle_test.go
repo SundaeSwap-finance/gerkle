@@ -36,13 +36,11 @@ func Test(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Len(t, proof, 5)
 
-	valid, err := mt.CheckProof(proof)
+	err = mt.CheckProof(proof)
 	assert.Nil(t, err)
-	assert.True(t, valid)
 
 	proof[1].Hash[2] += 1
-	valid, err = mt.CheckProof(proof)
-	assert.False(t, valid)
+	err = mt.CheckProof(proof)
 	assert.NotNil(t, err)
 }
 
@@ -78,13 +76,11 @@ func Test_SHA256HexColon(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Len(t, proof, 5)
 
-	valid, err := mt.CheckProof(proof)
+	err = mt.CheckProof(proof)
 	assert.Nil(t, err)
-	assert.True(t, valid)
 
 	proof[1].Hash[2] += 1
 
-	valid, err = mt.CheckProof(proof)
+	err = mt.CheckProof(proof)
 	assert.NotNil(t, err)
-	assert.False(t, valid)
 }

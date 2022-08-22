@@ -178,13 +178,13 @@ func (tree *MerkleTree) FindProofFor(leaf fmt.Stringer) ([]MerkleStep, error) {
 	return steps, nil
 }
 
-func (tree *MerkleTree) CheckProof(steps []MerkleStep) (bool, error) {
+func (tree *MerkleTree) CheckProof(steps []MerkleStep) error {
 	first, last := 0, len(steps)-1
 	if steps[first].Type != "Leaf" {
-		return false, fmt.Errorf("first entry must be a hash of the leaf node")
+		return fmt.Errorf("first entry must be a hash of the leaf node")
 	}
 	if steps[last].Type != "Root" {
-		return false, fmt.Errorf("last entry must be the hash of the leaf node")
+		return fmt.Errorf("last entry must be the hash of the leaf node")
 	}
 
 	hash := []byte{}
@@ -193,12 +193,12 @@ func (tree *MerkleTree) CheckProof(steps []MerkleStep) (bool, error) {
 			hash = step.Hash
 		} else if idx == last {
 			if !bytes.Equal(hash, step.Hash) {
-				return false, fmt.Errorf("proof steps don't produce the same root hash as in the proof")
+				return fmt.Errorf("proof steps don't produce the same root hash as in the proof")
 			}
 			if !bytes.Equal(hash, tree.Hash) {
-				return false, fmt.Errorf("proof root hash doesn't match the tree root hash")
+				return fmt.Errorf("proof root hash doesn't match the tree root hash")
 			}
-			return true, nil
+			return nil
 		} else {
 			var err error
 			if tree.hex {
@@ -223,13 +223,13 @@ func (tree *MerkleTree) CheckProof(steps []MerkleStep) (bool, error) {
 				}
 			}
 			if err != nil {
-				return false, fmt.Errorf("unable to compute hash: %w", err)
+				return fmt.Errorf("unable to compute hash: %w", err)
 			}
 			hash = tree.hasher.Sum(nil)
 			tree.hasher.Reset()
 		}
 	}
-	return false, fmt.Errorf("unreachable code")
+	return fmt.Errorf("unreachable code")
 }
 
 func (tree *MerkleTree) Print(indent int) {
