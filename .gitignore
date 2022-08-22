@@ -1,0 +1,13 @@
+dist
+
+## Pre Generated
+# Logs
+logs
+*.log
+
+# OSX Thumbnails
+.DS_Store
+
+# dotenv environment variables file
+.env
+.env.test
